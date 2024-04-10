@@ -4,7 +4,12 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
+@Getter
+@Setter
 @Table(name = "userAnswers")
 public class UserAnswer {
 
@@ -17,9 +22,9 @@ public class UserAnswer {
     @JoinColumn(name = "examResultId", nullable = false)
     private ExamResult examResult;
 
-    @JsonIgnoreProperties("listChoice")
     @ManyToOne
     @JoinColumn(name = "questionId", nullable = false)
+    @JsonIgnoreProperties("listChoice")
     private Question question;
 
     @ManyToOne
