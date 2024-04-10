@@ -6,10 +6,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * It adds a security requirement to the OpenAPI document, and defines a security scheme named "bearerAuth" that uses the
- * HTTP Bearer scheme
- */
+
 @Configuration
 public class OpenAPI300Configuration {
     @Bean

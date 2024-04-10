@@ -45,10 +45,12 @@ public class ExamResultImp implements ExamResultService {
         return examResultRepository.findById(id) .orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot find ExamResult with id: " + id));
     }
+    @Override
     public Long create (ExamResultDTO examResultDTO){
         final ExamResult examResult = mapToEntity(examResultDTO, new ExamResult());
         return examResultRepository.save(examResult).getExamResultId();
     }
+    @Override
     public void delete(Long id){
         examResultRepository.deleteById(id);;
     }
@@ -73,5 +75,13 @@ public class ExamResultImp implements ExamResultService {
     }
     public List<ExamResult> findAll(){
         return examResultRepository.findAll();
+    }
+    @Override
+    public List<ExamResult> findByUserId(Long id) {
+        return examResultRepository.findByUserId(id);
+    }
+    @Override
+    public List<ExamResult> findByExamId(Long id) {
+        return examResultRepository.findByExamExamId(id);
     }
 }

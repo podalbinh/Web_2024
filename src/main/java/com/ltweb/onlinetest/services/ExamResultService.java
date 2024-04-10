@@ -10,4 +10,6 @@ public interface ExamResultService {
     public Long create (ExamResultDTO examResultDTO);
     public void delete(Long id);
     public List<ExamResult> findAll();
+    public List<ExamResult> findByUserId(Long id);
+    public List<ExamResult> findByExamId(Long id);
 } 

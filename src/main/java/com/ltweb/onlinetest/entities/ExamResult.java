@@ -26,7 +26,6 @@ public class ExamResult {
     private User user;
 
     @ManyToOne
-    @JsonIgnoreProperties({"startTime", "endTime"})
     @JoinColumn(name = "examId", nullable = false)
     private Exam exam;
 
