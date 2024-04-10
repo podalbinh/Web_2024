@@ -8,7 +8,7 @@ import com.ltweb.onlinetest.entities.ExamResult;
 import com.ltweb.onlinetest.entities.UserAnswer;
 import com.ltweb.onlinetest.models.examresultDTO.ExamResultDTO;
 import com.ltweb.onlinetest.models.examresultDTO.ExamResultDTOAll;
-import com.ltweb.onlinetest.models.examresultDTO.ExamResultResponseDTO;
+import com.ltweb.onlinetest.models.examresultDTO.ExamResultDTOResponse;
 import com.ltweb.onlinetest.models.useranswerDTO.UserAnswerDTO;
 import com.ltweb.onlinetest.services.ExamResultService;
 
@@ -44,7 +44,7 @@ public class ExamResultControllers {
     @GetMapping("/{id}")
     public ResponseEntity<?> getExamResult(@PathVariable final Long id) {
         ExamResult examResult=examResultService.findById(id);
-        ExamResultResponseDTO examResultResponseDTO=new ExamResultResponseDTO(examResult.getExamResultId(),
+        ExamResultDTOResponse examResultResponseDTO=new ExamResultDTOResponse(examResult.getExamResultId(),
             examResult.getUser().getUsername(),examResult.getExam().getExamName(),examResult.getStartTime(),examResult.getStartTime(),
             examResult.getScore(),examResult.getStatus());
             List<UserAnswerDTO> list=new ArrayList<>();

@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
-public class ExamResultResponseDTO {
+public class ExamResultDTOResponse {
     private Long ExamResultId;
     private String userName;
     private String examText;
@@ -18,7 +18,7 @@ public class ExamResultResponseDTO {
     private Float score;
     private Boolean status;
     private List<UserAnswerDTO> listUserAnswerDTO;
-    public ExamResultResponseDTO(Long examResultId, String userName, String examText, LocalDateTime startTime,
+    public ExamResultDTOResponse(Long examResultId, String userName, String examText, LocalDateTime startTime,
             LocalDateTime endTime, Float score, Boolean status) {
         ExamResultId = examResultId;
         this.userName = userName;
