@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ExamResultControllers {
     @Autowired
     private ExamResultService examResultService;
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
         List<ExamResult> list=examResultService.findAll();
@@ -43,6 +45,7 @@ public class ExamResultControllers {
         }
         return ResponseEntity.ok(listDTO);
     }
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getExamResult(@PathVariable final Long id) {
         ExamResult examResult=examResultService.findById(id);
@@ -56,7 +59,7 @@ public class ExamResultControllers {
         examResultResponseDTO.setListUserAnswerDTO(list);
         return ResponseEntity.ok(examResultResponseDTO);
     }
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> requestMethodName(@PathVariable final Long id) {
             examResultService.delete(id);
         return ResponseEntity.noContent().build();
@@ -65,6 +68,7 @@ public class ExamResultControllers {
     public ResponseEntity<Long> create(@RequestBody final ExamResultDTO examResultDTO) {   
         return ResponseEntity.ok(examResultService.create(examResultDTO));
     }
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getExamResultByUserId(@PathVariable final Long id) {
         List<ExamResult> listExamResult=examResultService.findByUserId(id);
@@ -75,6 +79,7 @@ public class ExamResultControllers {
         }
     return ResponseEntity.ok(listDTO);
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/exam/{id}")
     public ResponseEntity<?> getExamResultByExamId(@PathVariable final Long id) {
         List<ExamResult> listExamResult=examResultService.findByExamId(id);
@@ -85,5 +90,10 @@ public class ExamResultControllers {
         }
     return ResponseEntity.ok(listDTO);
     }
-    
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable final Long id){
+        examResultService.delete(id);
+        return ResponseEntity.ok("Delete success!");
+    }
 }

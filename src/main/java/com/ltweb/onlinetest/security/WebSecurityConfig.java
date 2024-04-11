@@ -56,7 +56,7 @@ public class WebSecurityConfig {
         http.cors()
                 .and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/v1/exams/**","/api/v1/auth/**","/api/v1/questions/**").permitAll()
                 .antMatchers("/swagger-ui/**","/v3/**","/authenticate").permitAll()
                 .anyRequest().authenticated()
                 .and()

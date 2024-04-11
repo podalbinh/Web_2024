@@ -1,14 +1,18 @@
 package com.ltweb.onlinetest.entities;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
+@NoArgsConstructor
 @Entity
 @Getter
 @Setter
@@ -34,5 +38,4 @@ public class Exam {
 
     @Column(name = "endTime")
     private LocalDateTime endTime;
-
 }

@@ -1,6 +1,5 @@
 package com.ltweb.onlinetest.exceptions;
 
-
 import java.util.Date;
 
 import org.springframework.dao.DataAccessException;

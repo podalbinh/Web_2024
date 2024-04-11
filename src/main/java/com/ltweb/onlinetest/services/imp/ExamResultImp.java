@@ -66,7 +66,6 @@ public class ExamResultImp implements ExamResultService {
             Choice choice= choiceRepository.findById(i.getChoiceId()).orElseThrow(() -> new RuntimeException("Choice Id "+i.getChoiceId()+"is not found"));
             Question question =questionRepository.findById(i.getQuestionId()).orElseThrow(() -> new RuntimeException("Question Id "+i.getQuestionId()+"is not found"));
             userAnswer.setExamResult(examResult);
-            userAnswer.setUserAnswerId(i.getUserAnswerId());
             userAnswer.setChoice(choice);
             userAnswer.setQuestion(question);
             userAnswerRepository.save(userAnswer);

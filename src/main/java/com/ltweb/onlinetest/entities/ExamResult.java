@@ -41,7 +41,7 @@ public class ExamResult {
     @Column(name = "status", nullable = false)
     private Boolean status;
 
-    @OneToMany(mappedBy = "examResult")
+    @OneToMany(mappedBy = "examResult",cascade = CascadeType.ALL)
     private List<UserAnswer> listUserAnswer;
 
     public Long getExamResultId() {
