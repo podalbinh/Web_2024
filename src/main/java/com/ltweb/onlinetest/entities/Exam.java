@@ -38,4 +38,7 @@ public class Exam {
 
     @Column(name = "endTime")
     private LocalDateTime endTime;
+
+    @Column(name = "timeToDo")
+    private Long timeToDo;
 }
