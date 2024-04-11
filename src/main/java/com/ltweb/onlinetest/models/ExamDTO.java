@@ -20,4 +20,5 @@ public class ExamDTO {
     private String examType;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+    private Long timeToDo;
 }

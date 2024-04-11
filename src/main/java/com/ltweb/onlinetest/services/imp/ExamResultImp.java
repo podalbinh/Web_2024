@@ -60,7 +60,15 @@ public class ExamResultImp implements ExamResultService {
         User user= userRepository.findById(examResultDTO.getUserId()) .orElseThrow(() -> new RuntimeException("User Id "+examResultDTO.getUserId()+"is not found"));
         examResult.setExam(exam);
         examResult.setUser(user);
-        examResultRepository.save(examResult);
+        Float score = 0.0F;
+        for(UserAnswerDTORequest i: examResultDTO.getListUserAnswerDTO()){
+            UserAnswer userAnswer =new UserAnswer();
+            if(i.isCorrect()){
+                score+=1.0F;
+            }
+        }
+        examResult.setScore(score/examResult.getListUserAnswer().size()*10.0F);
+        examResultRepository.save(examResult);;
         for(UserAnswerDTORequest i: examResultDTO.getListUserAnswerDTO()){
             UserAnswer userAnswer =new UserAnswer();
             Choice choice= choiceRepository.findById(i.getChoiceId()).orElseThrow(() -> new RuntimeException("Choice Id "+i.getChoiceId()+"is not found"));

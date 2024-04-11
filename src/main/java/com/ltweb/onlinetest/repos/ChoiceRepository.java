@@ -8,4 +8,5 @@ import com.ltweb.onlinetest.entities.Choice;
 
 public interface ChoiceRepository extends JpaRepository<Choice,Long> {
     public Optional<Choice> findById(Long choiceId);
+    public void deleteById(Long choiceId);
 }

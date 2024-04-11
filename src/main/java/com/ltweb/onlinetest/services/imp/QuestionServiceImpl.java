@@ -84,8 +84,31 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void updateQuestion(Long id, QuestionDTO questionDTO) {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new RuntimeException("Could not find this question"));
-        question = mapToEntity(questionDTO, new Question());
+        // Lấy câu hỏi cũ từ cơ sở dữ liệu
+        Question question = questionRepository.findById(id)
+                                            .orElseThrow(() -> new RuntimeException("Could not find this question"));
+
+        // Xóa các lựa chọn cũ của câu hỏi khỏi cơ sở dữ liệu
+        List<Choice> oldChoices = question.getListChoice();
+        choiceRepository.deleteInBatch(oldChoices);
+        // Tạo các lựa chọn mới từ danh sách lựa chọn trong QuestionDTO
+        List<ChoiceDTO> choiceDTOList = questionDTO.getListChoice();
+        List<Choice> newChoices = new ArrayList<>();
+        if (choiceDTOList != null) {
+            for (ChoiceDTO choiceDTO : choiceDTOList) {
+                Choice choice = new Choice();
+                choice.setQuestion(question);
+                choice.setChoiceText(choiceDTO.getChoiceText());
+                choice.setCorrect(choiceDTO.isCorrect());
+                newChoices.add(choice);
+            }
+        }
+
+        // Cập nhật danh sách lựa chọn mới vào câu hỏi
+        question.setListChoice(newChoices);
+
+        // Lưu câu hỏi đã được cập nhật vào cơ sở dữ liệu
+        questionRepository.save(question);
     }
 
     

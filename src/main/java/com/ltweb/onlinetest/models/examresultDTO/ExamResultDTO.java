@@ -18,7 +18,6 @@ public class ExamResultDTO {
     private Long examId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Float score;
     private Boolean status;
     private List<UserAnswerDTORequest> listUserAnswerDTO;
 
