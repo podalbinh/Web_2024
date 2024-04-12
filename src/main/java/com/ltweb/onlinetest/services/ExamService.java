@@ -13,5 +13,6 @@ public interface ExamService {
     public void saveOrUpdateExam(ExamDTO examDTO);
     public void deleteExam(Long examId);
     public List<Exam> findAll();
+    public List<Exam> searchExam(String query);
 }
 

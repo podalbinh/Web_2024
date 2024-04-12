@@ -56,4 +56,13 @@ public class ExamServiceImpl implements ExamService {
     public List<Exam> findAll() {
         return examRepository.findAll();
     }
+
+    @Override
+    public List<Exam> searchExam(String query) {
+        List<Exam> examList = examRepository.searchExam(query);
+        if(examList.isEmpty()) {
+            throw new RuntimeException("Can't find exams which have " + query); 
+        }
+        return examList;
+    }
 }

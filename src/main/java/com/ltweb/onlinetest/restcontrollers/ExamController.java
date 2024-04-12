@@ -48,4 +48,9 @@ public class ExamController {
         List<Exam> exams = examService.findAll();
         return ResponseEntity.ok(exams);
     }
+
+    @GetMapping("/searchExam")
+    public ResponseEntity<List<Exam>> searchExam(@RequestParam("query") String query) {
+        return ResponseEntity.ok(examService.searchExam(query));
+    }
 }
