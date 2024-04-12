@@ -1,9 +1,6 @@
 package com.ltweb.onlinetest.restcontrollers;
 
 import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,18 +8,19 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ltweb.onlinetest.entities.User;
 import com.ltweb.onlinetest.models.UserDTO;
+import com.ltweb.onlinetest.payload.response.MessageResponse;
 import com.ltweb.onlinetest.security.AuthService;
 import com.ltweb.onlinetest.services.UserService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 
@@ -39,7 +37,7 @@ public class UserController {
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.findAllUser());
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.get(id));
@@ -49,12 +47,21 @@ public class UserController {
         return ResponseEntity.ok(authService.getCurrentUser());
 
     }
-
-    @PostMapping
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')")
-    @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createUser(@RequestBody @Valid UserDTO userDTO) {
+     @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+        if (userService.existsByUsername(userDTO.getUsername())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Username is already"));
+        }
+        if (userService.existsByEmail(userDTO.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Email is already"));
+        }
         return new ResponseEntity<>(userService.create(userDTO), HttpStatus.CREATED);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')")
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUser(@RequestParam("query") String query) {
+        return ResponseEntity.ok(userService.search(query));
     }
 
     @DeleteMapping("/{id}")

@@ -19,6 +19,7 @@ import com.ltweb.onlinetest.repos.ExamResultRepository;
 import com.ltweb.onlinetest.repos.QuestionRepository;
 import com.ltweb.onlinetest.repos.UserAnswerRepository;
 import com.ltweb.onlinetest.repos.UserRepository;
+import com.ltweb.onlinetest.security.AuthService;
 import com.ltweb.onlinetest.services.ExamResultService;
 import com.ltweb.onlinetest.repos.ExamRepository;
 import com.ltweb.onlinetest.entities.User;
@@ -33,7 +34,7 @@ public class ExamResultImp implements ExamResultService {
     @Autowired
     private UserAnswerRepository userAnswerRepository;
     @Autowired
-    private UserRepository userRepository;
+    private AuthService authService;
     @Autowired
     private ExamRepository examRepository;
     @Autowired
@@ -57,18 +58,18 @@ public class ExamResultImp implements ExamResultService {
     public ExamResult mapToEntity(ExamResultDTO examResultDTO,ExamResult examResult){
         examResult = modelMapper.map(examResultDTO, ExamResult.class);
         Exam exam= examRepository.findById(examResultDTO.getExamId()) .orElseThrow(() -> new RuntimeException("Exam Id "+examResultDTO.getExamId()+"is not found"));
-        User user= userRepository.findById(examResultDTO.getUserId()) .orElseThrow(() -> new RuntimeException("User Id "+examResultDTO.getUserId()+"is not found"));
+        User user= authService.getCurrentUser();
         examResult.setExam(exam);
         examResult.setUser(user);
         Float score = 0.0F;
         for(UserAnswerDTORequest i: examResultDTO.getListUserAnswerDTO()){
-            UserAnswer userAnswer =new UserAnswer();
-            if(i.isCorrect()){
+            Choice choice= choiceRepository.findById(i.getChoiceId()).orElseThrow(() -> new RuntimeException("Choice Id "+i.getChoiceId()+"is not found"));
+            if(choice.isCorrect()){
                 score+=1.0F;
             }
         }
-        examResult.setScore(score/examResult.getListUserAnswer().size()*10.0F);
-        examResultRepository.save(examResult);;
+        examResult.setScore(score/questionRepository.findByExamExamId(exam.getExamId()).size()*10.0F);
+        examResultRepository.save(examResult);
         for(UserAnswerDTORequest i: examResultDTO.getListUserAnswerDTO()){
             UserAnswer userAnswer =new UserAnswer();
             Choice choice= choiceRepository.findById(i.getChoiceId()).orElseThrow(() -> new RuntimeException("Choice Id "+i.getChoiceId()+"is not found"));
@@ -90,5 +91,9 @@ public class ExamResultImp implements ExamResultService {
     @Override
     public List<ExamResult> findByExamId(Long id) {
         return examResultRepository.findByExamExamId(id);
+    }
+    @Override
+    public List<ExamResult> findByExamIdAndUserId(Long examId,Long id) {
+        return examResultRepository.findByExamExamIdAndUserId(examId,id);
     }
 }

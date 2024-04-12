@@ -5,23 +5,32 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ltweb.onlinetest.entities.Exam;
 import com.ltweb.onlinetest.entities.ExamResult;
+import com.ltweb.onlinetest.entities.User;
 import com.ltweb.onlinetest.entities.UserAnswer;
 import com.ltweb.onlinetest.models.examresultDTO.ExamResultDTO;
 import com.ltweb.onlinetest.models.examresultDTO.ExamResultDTOAll;
 import com.ltweb.onlinetest.models.examresultDTO.ExamResultDTOResponse;
 import com.ltweb.onlinetest.models.useranswerDTO.UserAnswerDTO;
+import com.ltweb.onlinetest.payload.response.MessageResponse;
+import com.ltweb.onlinetest.security.AuthService;
 import com.ltweb.onlinetest.services.ExamResultService;
+import com.ltweb.onlinetest.services.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +43,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class ExamResultControllers {
     @Autowired
     private ExamResultService examResultService;
+    @Autowired
+    private AuthService authService;
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
@@ -45,10 +56,13 @@ public class ExamResultControllers {
         }
         return ResponseEntity.ok(listDTO);
     }
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getExamResult(@PathVariable final Long id) {
+    public ResponseEntity<?> getExamResultById(@PathVariable final Long id) {
         ExamResult examResult=examResultService.findById(id);
+        if(!examResult.getUser().getId().equals(authService.getCurrentUserId())){
+            return ResponseEntity.badRequest().body(new MessageResponse("You do not have access here"));
+        }        
         ExamResultDTOResponse examResultResponseDTO=new ExamResultDTOResponse(examResult.getExamResultId(),
             examResult.getUser().getUsername(),examResult.getExam().getExamName(),examResult.getStartTime(),examResult.getStartTime(),
             examResult.getScore(),examResult.getStatus());
@@ -64,21 +78,24 @@ public class ExamResultControllers {
             examResultService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
     public ResponseEntity<Long> create(@RequestBody final ExamResultDTO examResultDTO) {   
         return ResponseEntity.ok(examResultService.create(examResultDTO));
     }
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-    @GetMapping("/users/{id}")
-    public ResponseEntity<?> getExamResultByUserId(@PathVariable final Long id) {
-        List<ExamResult> listExamResult=examResultService.findByUserId(id);
-        List<ExamResultDTOAll> listDTO=new ArrayList<>();
-        for(ExamResult i: listExamResult){
-            listDTO.add(new ExamResultDTOAll(
-                i.getExamResultId(),i.getUser().getUsername(),i.getExam().getExamName(),i.getExam().getExamType().toString(),i.getStartTime(),i.getEndTime(),i.getScore()));
-        }
-    return ResponseEntity.ok(listDTO);
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/users")
+    public ResponseEntity<?> getAllExamResultByCurrentUser() {
+    List<ExamResult> listExamResult = examResultService.findByUserId(authService.getCurrentUserId());
+    List<ExamResultDTOAll> listDTO = new ArrayList<>();
+    for (ExamResult i : listExamResult) {
+        listDTO.add(new ExamResultDTOAll(
+            i.getExamResultId(), i.getUser().getUsername(), i.getExam().getExamName(), 
+            i.getExam().getExamType().toString(), i.getStartTime(), i.getEndTime(), i.getScore()));
     }
+    return ResponseEntity.ok(listDTO);
+}
+// Xem tất cả các kết quả kiểm tra của một bài kiểm tra
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/exam/{id}")
     public ResponseEntity<?> getExamResultByExamId(@PathVariable final Long id) {
@@ -88,12 +105,23 @@ public class ExamResultControllers {
             listDTO.add(new ExamResultDTOAll(
                 i.getExamResultId(),i.getUser().getUsername(),i.getExam().getExamName(),i.getExam().getExamType().toString(),i.getStartTime(),i.getEndTime(),i.getScore()));
         }
-    return ResponseEntity.ok(listDTO);
+        return ResponseEntity.ok(listDTO);
+    }
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("/users/exam/{id}")
+    public ResponseEntity<?> getExamResultByExamIdAndUserId(@PathVariable final Long id) {
+        List<ExamResult> listExamResult=examResultService.findByExamIdAndUserId(id,authService.getCurrentUserId());
+        List<ExamResultDTOAll> listDTO=new ArrayList<>();
+        for(ExamResult i: listExamResult){
+            listDTO.add(new ExamResultDTOAll(
+                i.getExamResultId(),i.getUser().getUsername(),i.getExam().getExamName(),i.getExam().getExamType().toString(),i.getStartTime(),i.getEndTime(),i.getScore()));
+        }
+        return ResponseEntity.ok(listDTO);
     }
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable final Long id){
         examResultService.delete(id);
-        return ResponseEntity.ok("Delete success!");
+       return ResponseEntity.ok().body(new MessageResponse("Delete success!"));
     }
 }

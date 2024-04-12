@@ -9,5 +9,6 @@ import java.util.List;
 public interface ExamResultRepository extends JpaRepository<ExamResult,Long>{
     public Optional<ExamResult> findById(Long examResultId);
     public List<ExamResult> findByUserId(Long userId);
+    public List<ExamResult> findByExamExamIdAndUserId(Long examId,Long userId);
     public List<ExamResult> findByExamExamId(Long examId);
 }

@@ -13,8 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ExamResultDTO {
-    private Long ExamResultId;
-    private Long userId;
     private Long examId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;

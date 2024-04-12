@@ -22,4 +22,6 @@ public interface UserService {
     public Long create(UserDTO userDTO);
 
     public void delete(Long id);
+
+    public List<User> search(String query);
 }

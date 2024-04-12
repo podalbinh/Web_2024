@@ -12,4 +12,5 @@ public interface ExamResultService {
     public List<ExamResult> findAll();
     public List<ExamResult> findByUserId(Long id);
     public List<ExamResult> findByExamId(Long id);
+    public List<ExamResult> findByExamIdAndUserId(Long examId,Long id);
 } 
