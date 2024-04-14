@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ltweb.onlinetest.entities.Choice;
 import com.ltweb.onlinetest.entities.Question;
-import com.ltweb.onlinetest.models.ChoiceDTO.ChoiceDTO;
-import com.ltweb.onlinetest.models.QuestionDTO.QuestionDTO;
-import com.ltweb.onlinetest.models.QuestionDTO.QuestionDTOAll;
-import com.ltweb.onlinetest.models.QuestionDTO.QuestionDTOResponse;
+import com.ltweb.onlinetest.models.choiceDTO.ChoiceDTO;
+import com.ltweb.onlinetest.models.questionDTO.QuestionDTO;
+import com.ltweb.onlinetest.models.questionDTO.QuestionDTOAll;
+import com.ltweb.onlinetest.models.questionDTO.QuestionDTOResponse;
 import com.ltweb.onlinetest.services.QuestionService;
 
 @RestController

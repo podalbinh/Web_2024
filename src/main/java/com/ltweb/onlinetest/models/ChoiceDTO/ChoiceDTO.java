@@ -1,4 +1,4 @@
-package com.ltweb.onlinetest.models.ChoiceDTO;
+package com.ltweb.onlinetest.models.choiceDTO;
 
 import lombok.Data;
 import lombok.Getter;

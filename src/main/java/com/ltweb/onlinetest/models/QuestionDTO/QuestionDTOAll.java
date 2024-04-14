@@ -1,4 +1,4 @@
-package com.ltweb.onlinetest.models.QuestionDTO;
+package com.ltweb.onlinetest.models.questionDTO;
 
 import lombok.Data;
 
