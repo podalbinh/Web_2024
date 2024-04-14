@@ -60,7 +60,7 @@ public class ExamResultControllers {
         }
         return ResponseEntity.ok(listDTO);
     }
-    @Operation(summary = "Get all ExamResult By Id")
+    @Operation(summary = "Get ExamResult By Id")
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getExamResultById(@PathVariable final Long id) {
