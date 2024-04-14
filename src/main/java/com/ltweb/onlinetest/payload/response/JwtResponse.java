@@ -11,8 +11,6 @@ public class JwtResponse {
     private String token; 
     private String type="Bearer";
     private String username;
-    private String email;
-    private String phone;
     private List<String> listRoles;
     public JwtResponse(String token, String username, List<String> listRoles) {
         this.token = token;

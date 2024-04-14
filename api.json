@@ -1,0 +1,1136 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "OpenAPI definition",
+      "version": "v0"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:8081",
+        "description": "Generated server url"
+      }
+    ],
+    "security": [
+      {
+        "bearerAuth": [
+          
+        ]
+      }
+    ],
+    "paths": {
+      "/api/v1/questions/{id}": {
+        "get": {
+          "tags": [
+            "question-controller"
+          ],
+          "operationId": "getQuestionById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "question-controller"
+          ],
+          "operationId": "updateQuestion",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionDTO"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "question-controller"
+          ],
+          "operationId": "deleteQuestion",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/exams/{id}": {
+        "get": {
+          "tags": [
+            "exam-controller"
+          ],
+          "operationId": "getExamById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Exam"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "exam-controller"
+          ],
+          "operationId": "saveOrUpdateExam",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamDTO"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "exam-controller"
+          ],
+          "operationId": "deleteExam",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/questions": {
+        "post": {
+          "tags": [
+            "question-controller"
+          ],
+          "operationId": "createQuestion",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuestionDTO"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/exams": {
+        "post": {
+          "tags": [
+            "exam-controller"
+          ],
+          "operationId": "createExam",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamDTO"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/examresult": {
+        "post": {
+          "tags": [
+            "exam-result-controllers"
+          ],
+          "operationId": "create",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamResultDTO"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/auth/signup": {
+        "post": {
+          "tags": [
+            "auth-controllers"
+          ],
+          "operationId": "registerUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignUpRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/auth/signin": {
+        "post": {
+          "tags": [
+            "auth-controllers"
+          ],
+          "operationId": "loginUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignInRequest"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/auth/logout": {
+        "post": {
+          "tags": [
+            "auth-controllers"
+          ],
+          "operationId": "logoutUser",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/users": {
+        "get": {
+          "tags": [
+            "user-controller"
+          ],
+          "operationId": "getAllUsers",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/UserDTO"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "user-controller"
+          ],
+          "operationId": "createUser",
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDTO"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/questions/exam/{id}": {
+        "get": {
+          "tags": [
+            "question-controller"
+          ],
+          "operationId": "getQuestionByExamId",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/questions/all": {
+        "get": {
+          "tags": [
+            "question-controller"
+          ],
+          "operationId": "getAllQuestions",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Question"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/exams/searchExam": {
+        "get": {
+          "tags": [
+            "exam-controller"
+          ],
+          "operationId": "searchExam",
+          "parameters": [
+            {
+              "name": "query",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Exam"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/exams/all": {
+        "get": {
+          "tags": [
+            "exam-controller"
+          ],
+          "operationId": "getAllExam",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "*/*": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Exam"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/examresult/{id}": {
+        "get": {
+          "tags": [
+            "exam-result-controllers"
+          ],
+          "operationId": "getExamResultById",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "exam-result-controllers"
+          ],
+          "operationId": "delete",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/examresult/users": {
+        "get": {
+          "tags": [
+            "exam-result-controllers"
+          ],
+          "operationId": "getAllExamResultByCurrentUser",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/examresult/users/exam/{id}": {
+        "get": {
+          "tags": [
+            "exam-result-controllers"
+          ],
+          "operationId": "getExamResultByExamIdAndUserId",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/examresult/exam/{id}": {
+        "get": {
+          "tags": [
+            "exam-result-controllers"
+          ],
+          "operationId": "getExamResultByExamId",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/v1/examresult/all": {
+        "get": {
+          "tags": [
+            "exam-result-controllers"
+          ],
+          "operationId": "getAll",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/users/{id}": {
+        "get": {
+          "tags": [
+            "user-controller"
+          ],
+          "operationId": "getUser",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "user-controller"
+          ],
+          "operationId": "deleteUser",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            }
+          }
+        }
+      },
+      "/api/users/search": {
+        "get": {
+          "tags": [
+            "user-controller"
+          ],
+          "operationId": "searchUser",
+          "parameters": [
+            {
+              "name": "query",
+              "in": "query",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/users/me": {
+        "get": {
+          "tags": [
+            "user-controller"
+          ],
+          "operationId": "me",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "ChoiceDTO": {
+          "type": "object",
+          "properties": {
+            "choiceId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "choiceText": {
+              "type": "string"
+            },
+            "questionId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "correct": {
+              "type": "boolean"
+            }
+          }
+        },
+        "QuestionDTO": {
+          "type": "object",
+          "properties": {
+            "questionId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "examId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "questionText": {
+              "type": "string"
+            },
+            "listChoice": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/ChoiceDTO"
+              }
+            }
+          }
+        },
+        "ExamDTO": {
+          "type": "object",
+          "properties": {
+            "examId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "examName": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "examType": {
+              "type": "string"
+            },
+            "startTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "endTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "timeToDo": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "ExamResultDTO": {
+          "type": "object",
+          "properties": {
+            "examId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "startTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "endTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "status": {
+              "type": "boolean"
+            },
+            "listUserAnswerDTO": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/UserAnswerDTORequest"
+              }
+            }
+          }
+        },
+        "UserAnswerDTORequest": {
+          "type": "object",
+          "properties": {
+            "userAnswerId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "questionId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "choiceId": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "SignUpRequest": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "listRoles": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "SignInRequest": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "UserDTO": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "created": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "userStatus": {
+              "type": "boolean"
+            },
+            "listRoles": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Choice": {
+          "type": "object",
+          "properties": {
+            "choiceId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "choiceText": {
+              "type": "string"
+            },
+            "question": {
+              "$ref": "#/components/schemas/Question"
+            },
+            "correct": {
+              "type": "boolean"
+            }
+          }
+        },
+        "Exam": {
+          "type": "object",
+          "properties": {
+            "examId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "examName": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "examType": {
+              "type": "string",
+              "enum": [
+                "FREE",
+                "SPECIFIC"
+              ]
+            },
+            "startTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "endTime": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "timeToDo": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        },
+        "Question": {
+          "type": "object",
+          "properties": {
+            "questionId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "exam": {
+              "$ref": "#/components/schemas/Exam"
+            },
+            "questionText": {
+              "type": "string"
+            },
+            "listChoice": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Choice"
+              }
+            }
+          }
+        },
+        "Role": {
+          "type": "object",
+          "properties": {
+            "roleId": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "rolename": {
+              "type": "string",
+              "enum": [
+                "ROLE_ADMIN",
+                "ROLE_MODERATOR",
+                "ROLE_USER"
+              ]
+            }
+          }
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64"
+            },
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "created": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "phone": {
+              "type": "string"
+            },
+            "userStatus": {
+              "type": "boolean"
+            },
+            "listRoles": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/Role"
+              }
+            }
+          }
+        }
+      },
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "name": "bearerAuth",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }
