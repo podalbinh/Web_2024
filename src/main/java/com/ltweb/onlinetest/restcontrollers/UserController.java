@@ -21,6 +21,7 @@ import com.ltweb.onlinetest.payload.response.MessageResponse;
 import com.ltweb.onlinetest.security.AuthService;
 import com.ltweb.onlinetest.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 
@@ -31,24 +32,27 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AuthService authService;
-
+    @Operation(summary = "Get all User")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')")
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.findAllUser());
     }
+    @Operation(summary = "Get User By userId")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')")
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable Long id) {
         return ResponseEntity.ok(userService.get(id));
     }
+    @Operation(summary = "Get current User")
     @GetMapping("/me")
     public ResponseEntity<User> me() {
         return ResponseEntity.ok(authService.getCurrentUser());
 
     }
+    @Operation(summary = "Create User")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')")
-     @PostMapping
+    @PostMapping
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         if (userService.existsByUsername(userDTO.getUsername())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Username is already"));
@@ -58,12 +62,13 @@ public class UserController {
         }
         return new ResponseEntity<>(userService.create(userDTO), HttpStatus.CREATED);
     }
+    @Operation(summary = "Search User")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')")
     @GetMapping("/search")
     public ResponseEntity<List<User>> searchUser(@RequestParam("query") String query) {
         return ResponseEntity.ok(userService.search(query));
     }
-
+    @Operation(summary = "Delete User")
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')")

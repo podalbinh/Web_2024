@@ -23,11 +23,14 @@ import com.ltweb.onlinetest.models.questionDTO.QuestionDTOAll;
 import com.ltweb.onlinetest.models.questionDTO.QuestionDTOResponse;
 import com.ltweb.onlinetest.services.QuestionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/v1/questions")
 public class QuestionController {
     @Autowired 
     private QuestionService questionService;
+    @Operation(summary = "Get Question By Id")
     @GetMapping("/{id}")
     public ResponseEntity<?> getQuestionById(@PathVariable Long id) {
         Question question = questionService.getQuestionById(id);
@@ -43,17 +46,20 @@ public class QuestionController {
         questionDTOResponse.setListChoice(list);
         return ResponseEntity.ok(questionDTOResponse);
     }
+    @Operation(summary = "Create Question")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<Long> createQuestion(@RequestBody QuestionDTO questionDTO) {
         return ResponseEntity.ok(questionService.createQuestion(questionDTO));
     }
+    @Operation(summary = "Delete Question and Choice")
     @PreAuthorize(" hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}") 
     public ResponseEntity<String> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestionById(id);
         return ResponseEntity.ok("Xóa câu hỏi hiện tại thành công!");
     }
+    @Operation(summary = "Update Question and Choice")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<String> updateQuestion(@PathVariable Long id, @RequestBody QuestionDTO questionDTO) {
@@ -61,13 +67,14 @@ public class QuestionController {
         questionService.updateQuestion(id, questionDTO);
         return ResponseEntity.ok("Cập nhật câu hỏi thành công!");
     }
+    @Operation(summary = "Get all Question")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<List<Question>> getAllQuestions() {
         List<Question> questions = questionService.findAllQuestions();
         return ResponseEntity.ok(questions);
     }
-
+    @Operation(summary = "Get Question By examId")
     @GetMapping("/exam/{id}")
     public ResponseEntity<?> getQuestionByExamId(@PathVariable Long id) {
         List<Question> questions = questionService.findQuestionsByExamId(id);

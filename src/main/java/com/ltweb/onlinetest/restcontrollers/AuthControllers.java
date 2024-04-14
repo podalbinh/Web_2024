@@ -33,6 +33,8 @@ import com.ltweb.onlinetest.security.CustomUserDetails;
 import com.ltweb.onlinetest.services.RoleService;
 import com.ltweb.onlinetest.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -48,6 +50,7 @@ public class AuthControllers {
     @Autowired
     private PasswordEncoder encoder;
 
+    @Operation(summary = "Sign Up" )
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
         if (userService.existsByUsername(signUpRequest.getUsername())) {
@@ -102,7 +105,7 @@ public class AuthControllers {
         userService.saveOrUpdate(user);
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
-
+    @Operation(summary = "Sign In")
     @PostMapping("/signin")
     public ResponseEntity<?> loginUser(@RequestBody SignInRequest SignInRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -114,6 +117,7 @@ public class AuthControllers {
                 .map(item -> item.getAuthority()).collect(Collectors.toList());
         return ResponseEntity.ok(new JwtResponse(jwt, customUserDetails.getUsername(),listRoles));
     }
+    @Operation(summary = "Log Out")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MODERATOR')  or hasRole('ROLE_USER')")
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser() {

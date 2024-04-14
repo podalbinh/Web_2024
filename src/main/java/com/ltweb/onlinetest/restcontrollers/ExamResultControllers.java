@@ -16,6 +16,8 @@ import com.ltweb.onlinetest.security.AuthService;
 import com.ltweb.onlinetest.services.ExamResultService;
 import com.ltweb.onlinetest.services.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,8 @@ public class ExamResultControllers {
     private ExamResultService examResultService;
     @Autowired
     private AuthService authService;
+
+    @Operation(summary = "Get all ExamResult")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
@@ -56,7 +60,8 @@ public class ExamResultControllers {
         }
         return ResponseEntity.ok(listDTO);
     }
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @Operation(summary = "Get all ExamResult By Id")
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getExamResultById(@PathVariable final Long id) {
         ExamResult examResult=examResultService.findById(id);
@@ -73,16 +78,13 @@ public class ExamResultControllers {
         examResultResponseDTO.setListUserAnswerDTO(list);
         return ResponseEntity.ok(examResultResponseDTO);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<?> requestMethodName(@PathVariable final Long id) {
-            examResultService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
+    @Operation(summary = "Create ExamResult (User)")
     @PreAuthorize("hasRole('ROLE_USER')")
     @PostMapping
     public ResponseEntity<Long> create(@RequestBody final ExamResultDTO examResultDTO) {   
         return ResponseEntity.ok(examResultService.create(examResultDTO));
     }
+    @Operation(summary = "Get all ExamResult By currentUser")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/users")
     public ResponseEntity<?> getAllExamResultByCurrentUser() {
@@ -97,6 +99,7 @@ public class ExamResultControllers {
 }
 // Xem tất cả các kết quả kiểm tra của một bài kiểm tra
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Get all ExamResult By examId")
     @GetMapping("/exam/{id}")
     public ResponseEntity<?> getExamResultByExamId(@PathVariable final Long id) {
         List<ExamResult> listExamResult=examResultService.findByExamId(id);
@@ -107,6 +110,7 @@ public class ExamResultControllers {
         }
         return ResponseEntity.ok(listDTO);
     }
+    @Operation(summary = "Get all ExamResult with current User By examId")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/users/exam/{id}")
     public ResponseEntity<?> getExamResultByExamIdAndUserId(@PathVariable final Long id) {
@@ -118,6 +122,7 @@ public class ExamResultControllers {
         }
         return ResponseEntity.ok(listDTO);
     }
+    @Operation(summary = "Delete ExamResult and UserAnswer")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable final Long id){
