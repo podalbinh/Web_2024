@@ -3,7 +3,6 @@ package com.ltweb.onlinetest.models.examresultDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.ltweb.onlinetest.models.useranswerDTO.UserAnswerDTO;
 import com.ltweb.onlinetest.models.useranswerDTO.UserAnswerDTORequest;
 
 import lombok.Data;

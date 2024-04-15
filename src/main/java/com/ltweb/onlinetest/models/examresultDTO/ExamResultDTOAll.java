@@ -1,7 +1,6 @@
 package com.ltweb.onlinetest.models.examresultDTO;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import lombok.Data;
 @Data
