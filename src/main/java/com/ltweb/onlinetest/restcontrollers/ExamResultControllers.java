@@ -129,6 +129,7 @@ public class ExamResultControllers {
         examResultService.delete(id);
        return ResponseEntity.ok().body(new MessageResponse("Delete success!"));
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Top 10 User most score")
     @GetMapping("/top")
     public ResponseEntity<?> getTop10ExamResultByExamId(@RequestParam("examId")Long examId) {
@@ -140,6 +141,7 @@ public class ExamResultControllers {
         }
         return ResponseEntity.ok(listDTO);
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "statistic")
     @GetMapping("/statistic")
     public ResponseEntity<?> statistic(@RequestParam("examId")Long examId) {
