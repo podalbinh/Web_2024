@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,6 +35,7 @@ import com.ltweb.onlinetest.entities.ERole;
 import com.ltweb.onlinetest.entities.Role;
 import com.ltweb.onlinetest.entities.User;
 import com.ltweb.onlinetest.jwt.JwtTokenProvider;
+import com.ltweb.onlinetest.models.UserDTO;
 import com.ltweb.onlinetest.payload.request.SignInRequest;
 import com.ltweb.onlinetest.payload.request.SignUpRequest;
 import com.ltweb.onlinetest.payload.response.JwtResponse;
@@ -153,5 +155,22 @@ public class AuthControllers {
         authService.confirmUser(token);
         return ResponseEntity.ok("Confirm");
     }
-
+    @Operation(summary = "Update user with CurrentUser")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @PutMapping
+    public ResponseEntity<?> saveOrUpdateUser(UserDTO userDTO) {
+        User user = userService.findById(authService.getCurrentUserId());
+        user.setPhone(userDTO.getPhone());
+        if (userService.existsByUsername(userDTO.getUsername())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Username is already"));
+        }
+        if (userService.existsByEmail(userDTO.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Email is already"));
+        }
+        user.setPassword(encoder.encode(userDTO.getPassword()));
+        user.setEmail(userDTO.getEmail());
+        user.setUsername(userDTO.getUsername());
+        userService.saveOrUpdate(user);
+        return ResponseEntity.ok(new String("Update success!"));
+    }
 }
