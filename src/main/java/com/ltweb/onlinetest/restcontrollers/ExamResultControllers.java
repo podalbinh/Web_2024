@@ -129,4 +129,21 @@ public class ExamResultControllers {
         examResultService.delete(id);
        return ResponseEntity.ok().body(new MessageResponse("Delete success!"));
     }
+    @Operation(summary = "Top 10 User most score")
+    @GetMapping("/top")
+    public ResponseEntity<?> getTop10ExamResultByExamId(@RequestParam("examId")Long examId) {
+        List<ExamResult> list=examResultService.Top10ExamResult(examId);
+        List<ExamResultDTOAll> listDTO=new ArrayList<>();
+        for(ExamResult i: list){
+            listDTO.add(new ExamResultDTOAll(
+                i.getExamResultId(),i.getUser().getUsername(),i.getExam().getExamName(),i.getExam().getExamType().toString(),i.getStartTime(),i.getEndTime(),i.getScore()));
+        }
+        return ResponseEntity.ok(listDTO);
+    }
+    @Operation(summary = "statistic")
+    @GetMapping("/statistic")
+    public ResponseEntity<?> statistic(@RequestParam("examId")Long examId) {
+        return ResponseEntity.ok(examResultService.state(examId));
+    }
+    
 }

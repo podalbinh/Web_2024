@@ -1,14 +1,19 @@
 package com.ltweb.onlinetest.restcontrollers;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +21,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ltweb.onlinetest.entities.ERole;
@@ -29,11 +38,14 @@ import com.ltweb.onlinetest.payload.request.SignInRequest;
 import com.ltweb.onlinetest.payload.request.SignUpRequest;
 import com.ltweb.onlinetest.payload.response.JwtResponse;
 import com.ltweb.onlinetest.payload.response.MessageResponse;
+import com.ltweb.onlinetest.security.AuthService;
 import com.ltweb.onlinetest.security.CustomUserDetails;
+import com.ltweb.onlinetest.services.EmailService;
 import com.ltweb.onlinetest.services.RoleService;
 import com.ltweb.onlinetest.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.models.media.EmailSchema;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -49,7 +61,10 @@ public class AuthControllers {
     private RoleService roleService;
     @Autowired
     private PasswordEncoder encoder;
-
+    @Autowired
+    private AuthService authService;
+    @Autowired
+    private EmailService emailService;
     @Operation(summary = "Sign Up" )
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
@@ -59,7 +74,14 @@ public class AuthControllers {
         if (userService.existsByEmail(signUpRequest.getEmail())) {
             return ResponseEntity.badRequest().body(new MessageResponse("Email is already"));
         }
+        
         User user = new User();
+        user.setUserStatus(false);
+        String token = UUID.randomUUID().toString();
+        user.setConfirmationToken(token);
+        user.setConfirmationTokenExpiration(LocalDateTime.now().plusMinutes(15)); // Token expires after 15 minutes
+
+
         user.setUsername(signUpRequest.getUsername());
         user.setPassword(encoder.encode(signUpRequest.getPassword()));
         user.setEmail(signUpRequest.getEmail());
@@ -72,7 +94,6 @@ public class AuthControllers {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        user.setUserStatus(true);
         Set<String> roles = signUpRequest.getListRoles();
         Set<Role> listRoles = new HashSet<>();
         if (roles == null) {
@@ -102,7 +123,10 @@ public class AuthControllers {
             });
         }
         user.setListRoles(listRoles);
+
+        String link = "http://localhost:8081/api/v1/auth/confirm?token=" + token;
         userService.saveOrUpdate(user);
+        emailService.sendRegistrationConfirmationEmail(signUpRequest.getEmail(),signUpRequest.getUsername(),link);
         return ResponseEntity.ok(new MessageResponse("User registered successfully"));
     }
     @Operation(summary = "Sign In")
@@ -124,4 +148,10 @@ public class AuthControllers {
         SecurityContextHolder.clearContext();
        return ResponseEntity.ok("Logout Success!!!");
     }
+    @GetMapping("/confirm")
+    public ResponseEntity<?> confirm(@RequestParam("token") String token) {
+        authService.confirmUser(token);
+        return ResponseEntity.ok("Confirm");
+    }
+
 }

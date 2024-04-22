@@ -1,5 +1,6 @@
 package com.ltweb.onlinetest.services.imp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.ltweb.onlinetest.entities.ExamResult;
 import com.ltweb.onlinetest.entities.Question;
 import com.ltweb.onlinetest.entities.UserAnswer;
+import com.ltweb.onlinetest.models.StateScoreDTO;
 import com.ltweb.onlinetest.models.examresultDTO.ExamResultDTO;
 import com.ltweb.onlinetest.models.useranswerDTO.UserAnswerDTO;
 import com.ltweb.onlinetest.models.useranswerDTO.UserAnswerDTORequest;
@@ -61,6 +63,9 @@ public class ExamResultImp implements ExamResultService {
         User user= authService.getCurrentUser();
         examResult.setExam(exam);
         examResult.setUser(user);
+        if(examResultDTO.getListUserAnswerDTO().size()!=questionRepository.findByExamExamId(exam.getExamId()).size()){
+            throw new RuntimeException("Please fill in all answers. You just answered "+examResultDTO.getListUserAnswerDTO().size()+"/"+questionRepository.findByExamExamId(exam.getExamId()).size()+" questions");
+        }
         Float score = 0.0F;
         for(UserAnswerDTORequest i: examResultDTO.getListUserAnswerDTO()){
             Choice choice= choiceRepository.findById(i.getChoiceId()).orElseThrow(() -> new RuntimeException("Choice Id "+i.getChoiceId()+"is not found"));
@@ -95,5 +100,14 @@ public class ExamResultImp implements ExamResultService {
     @Override
     public List<ExamResult> findByExamIdAndUserId(Long examId,Long id) {
         return examResultRepository.findByExamExamIdAndUserId(examId,id);
+    }
+    @Override
+    public List<ExamResult> Top10ExamResult(Long examId) {
+        return examResultRepository.findTop10ByExamId(examId);
+    }
+    @Override
+    public StateScoreDTO state(Long examId) {
+       return  new StateScoreDTO(examResultRepository.findAverageScoreByExamId(examId),examResultRepository.findHighestScoresByExamId(examId),examResultRepository.findLowestScoresByExamId(examId));
+       
     }
 }

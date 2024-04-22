@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.ltweb.onlinetest.entities.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,4 +19,10 @@ public interface UserRepository extends JpaRepository<User,Long> {
     "u.username LIKE CONCAT('%',:query, '%')")
     List<User> searchUser(String query);
     // Optional<User> findByUsernameAndProviderId(String username, String providerId);
+    User findByConfirmationToken(String token);
+    void deleteAllByUserStatusFalseAndConfirmationTokenExpirationBefore(LocalDateTime now);
+    Boolean existsByUsernameAndUserStatusTrue(String username);
+    Boolean existsByEmailAndUserStatusTrue(String email);
+    void deleteAllByUserStatusFalseAndUsername(String username);
+    User findByUsernameAndUserStatusTrue(String username);
 }

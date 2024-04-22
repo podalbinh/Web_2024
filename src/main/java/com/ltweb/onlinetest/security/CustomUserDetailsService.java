@@ -15,9 +15,12 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UserRepository userRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user=userRepository.findByUsername(username);
+        User user=userRepository.findByUsernameAndUserStatusTrue(username);
         if(user==null){
             throw new UsernameNotFoundException("User not found");
+        }
+        if(!user.isUserStatus()){
+            throw new UsernameNotFoundException("Email has not been verified");
         }
         return CustomUserDetails.mapUserToUserDetails(user);
     }

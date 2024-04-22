@@ -1,5 +1,6 @@
 package com.ltweb.onlinetest.entities;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import javax.persistence.*;
@@ -19,14 +20,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     @JsonIgnore
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true)
+    @Column
     private String email;
 
     @Column(name = "created")
@@ -41,5 +42,11 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.DETACH)
     @JoinTable(name = "User_Role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> listRoles = new HashSet<>();
+    
+    @Column(nullable = true)
+    private String confirmationToken;
+
+    @Column(nullable = true)
+    private LocalDateTime confirmationTokenExpiration;
 
 }

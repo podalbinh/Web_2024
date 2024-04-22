@@ -46,12 +46,12 @@ public class UserServiceImp implements UserService {
 
     @Override
     public boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
+        return userRepository.existsByEmailAndUserStatusTrue(email);
     }
 
     @Override
     public boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
+        return userRepository.existsByUsernameAndUserStatusTrue(username);
     }
 
     @Override

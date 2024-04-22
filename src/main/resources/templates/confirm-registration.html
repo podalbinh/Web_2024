@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Confirm Registration</title>
+</head>
+<body>
+    <p>Hello, <span th:text="${name}">User</span>!</p>
+    <p>Thank you for registering. Please click the link below to activate your account:</p>
+    <a th:href="${link}">Confirm Registration</a>
+    <p>If you did not register, please ignore this email.</p>
+</body>
+</html>
